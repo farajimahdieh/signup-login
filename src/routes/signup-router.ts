@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { userRepo } from "./dependancy";
-import { userDataZod } from "./user.dto";
-import { User } from "./user-type";
+import { userRepo } from "../dependancy";
+import { userDataZod } from "../user.dto";
+import { User } from "../user-type";
 import { ZodError } from "zod";
+import { omit } from "zod/v4/core/util.cjs";
 export const router = Router()
-
 
 
 router.post("/", (req, res) =>{

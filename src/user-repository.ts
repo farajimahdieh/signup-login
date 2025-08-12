@@ -1,15 +1,15 @@
-import { error } from "console";
-import { User } from "./user-type";
- import { v4 as uuidv4 } from 'uuid'
 
-interface UserWithId extends User {
-    id : string 
-}
+import { User } from "./user-type";
+import { v4 as uuidv4 } from 'uuid'
+
+
+type UserCreation = Omit<User, "id">
+
 export class UserRepository {
 
-    users : UserWithId[] = []
+    users : User[] = []
 
-    addUser = (input : User) =>{
+    addUser = (input : UserCreation) =>{
         
 
         if (this.findUserByUsername(input.username)|| this.findUserByEmail(input.email)){ 
@@ -29,5 +29,17 @@ export class UserRepository {
     findUserByEmail = (email : string) =>{
 
         return this.users.find(u => u.email === email)
+    }
+
+    matchUserWithPassword = (username : string, password : string) =>{
+
+        const user = this.users.find(u => u.username === username)
+        if (user){
+            if(user.password === password){
+                return true
+            }
+            else return false
+        }
+        else return false
     }
 }
