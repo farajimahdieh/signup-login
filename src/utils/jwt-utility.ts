@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv-flow"
 import { UserWithoutPassword } from "../types/user-type"
-import { log } from "console"
 dotenv.config()
 
 const SECRET_KEY  = process.env.jwt_secret_key?.trim()
