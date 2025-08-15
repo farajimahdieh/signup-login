@@ -25,32 +25,31 @@ export const router = Router()
 //         }
         
 //     }catch(e){
-//             res.status(400).json({"status" :"Validation Error!"}) // is this a validation error?
+//             res.status(400).json({"status" :"Validation Error!"}) 
 //         }
   
     
 // })
 
-router.post("/", async(req, res) =>{
 
-    try{
-        const {username, password} = (req.body)
-        const user = await userRepo.findUserByUsername(username)
-        if(user){
-            if( await userRepo.matchUserWithPassword(username, password)){
-                const email = user.email //////?????
-                const token = encryptJWT({username : username, email : email})
-                res.cookie("jwt", token).send({ ok: true })
-            
+router.post("/", async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const user = await userRepo.findUserByUsername(username);
+
+        if (user) {
+            if (await userRepo.matchUserWithPassword(username, password)) {
+                const email = user.email;
+                const token = encryptJWT({ username: username, email: email });
+                res.cookie("jwt", token).json({"code" : "Success"})
+            } else {
+                res.status(400).json({ "code": "INVALID_CREDENTIALS" });
             }
-                    else{res.status(400).json({"status" :"Validation Error!"})
+        } else {
+            res.status(400).json({ "code": "USER_NOT_FOUND" });
         }
-            }else{res.status(400).json({"status" :"Validation Error!"})
-        }
-        
-    }catch(e){
-            res.status(400).json({"status" :"Validation Error!"}) // is this a validation error?
-        }
-  
-    
-})
+
+    } catch (e) {
+        res.status(400).json({ "code": "NOT_FOUND" });
+    }
+});

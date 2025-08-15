@@ -1,12 +1,12 @@
 
-import { User } from "./types/user-type";
+import { User } from '../types/user-type';
 import { v4 as uuidv4, v4 } from 'uuid'
 import bcrypt from "bcrypt"
-import { UserCreation } from "./types/user-type";
+import { UserCreation } from '../types/user-type';
 import { Repository } from "typeorm";
-import { users } from "./entities/user-entity";
-import { AppDataSource } from "./data-source";
-import { userRepo } from "./dependancy";
+import { users } from '../entities/user-entity';
+import { AppDataSource } from '../data-source';
+import { userRepo } from '../dependancy';
 import { error } from "console";
 
 

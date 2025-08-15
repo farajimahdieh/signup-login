@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { userRepo } from "../dependancy";
-import { userDataZod } from "../user.dto";
+import { userDataZod } from "../utils/validator/user.dto";
 import { User } from "../types/user-type";
 import { ZodError } from "zod";
 import { omit } from "zod/v4/core/util.cjs";
@@ -14,18 +14,18 @@ router.post("/", async(req, res) =>{
             try{
                 
                 await userRepo.addUser({ email, username, password })
-                res.status(200).send("User added successfully!") 
+                res.status(200)
 
                 }
                 
                 catch(e){
-                    res.status(400).send("User already exists!")
+                    res.status(400).json({"code" : "USER_ALREADY_EXISTS"})
                 }
         }catch(e){
 
             if(e instanceof ZodError)
 
-                res.status(400).send("Validation Error!")
+                res.status(400).json({"code" : "VALIDATION_ERROR"})
         }
 
     
