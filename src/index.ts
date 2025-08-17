@@ -1,6 +1,6 @@
 import dotenv from "dotenv-flow"
 import express from "express"
-import { router as registerRouter } from "./routes/signup-router"
+import { routerSignup, routerLogin} from "./routes/register-login-router"
 import {router as loginRouter} from "./routes/login-router"
 import {router as inforouter} from "./routes/seeinfo-router"
 import "reflect-metadata"
@@ -13,8 +13,8 @@ app.use(express.json())
 
 
 
-app.use("/register", registerRouter)
-app.use("/login", loginRouter)
+app.use("/", routerSignup)
+app.use("/", routerLogin)
 // app.use("/seeinfo", inforouter)
 
 

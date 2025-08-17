@@ -1,13 +1,12 @@
 
-import { User } from '../types/user-type';
 import { v4 as uuidv4, v4 } from 'uuid'
 import bcrypt from "bcrypt"
 import { UserCreation } from '../types/user-type';
 import { Repository } from "typeorm";
-import { users } from '../entities/user-entity';
+import { Users } from '../entities/user-entity';
 import { AppDataSource } from '../data-source';
-import { userRepo } from '../dependancy';
-import { error } from "console";
+
+
 
 
 // export class UserRepository {
@@ -22,8 +21,9 @@ import { error } from "console";
 //     addUser = async(input : UserCreation) =>{
         
 
-//         if (this.findUserByUsername(input.username)|| this.findUserByEmail(input.email)){ 
-//             throw new Error ("User already exists!")
+//        
+        // if (await this.findUserByUsername(input.username) || await this.findUserByEmail(input.email)){ 
+        //     throw new Error ("User already exists!")}
 
 //         }
 //         else{    
@@ -74,18 +74,18 @@ import { error } from "console";
 
 export class UserRepository {
 
-    users : User[] = []
-    repo : Repository<users>
+    // users : User[] = []
+    repo : Repository<Users>
 
     constructor() {
-    this.repo = AppDataSource.getRepository(users);
+    this.repo = AppDataSource.getRepository(Users);
     
   }
     addUser = async(input : UserCreation) =>{
 
         const hashedPassword = await this.hashPassword(input.password)
-        const user = {email : input.email, username : input.username, password : hashedPassword, id :v4()}
-        await this.repo.save(user)
+        const user = {email : input.email, username : input.username, password : hashedPassword, id :uuidv4()}
+        return await this.repo.insert(user)
     }
 
     findUserByUsername = (username : string) => {
