@@ -16,6 +16,7 @@ routerSignup.post("/register", async(req, res) =>{
                 await userRepo.addUser({ email, username, password })
                 res.status(200).send("ok")
 
+
                 }
                 
                 catch(e){
@@ -36,19 +37,23 @@ routerSignup.post("/register", async(req, res) =>{
 export const routerLogin = Router()
 
 routerLogin.post("/login", async (req, res) => {
+
     try {
 
-        const { email, username, password } = userDataZod.parse(req.body)
-        try{
-            const token = await userService.loginUser({username, password})
-            res.cookie("jwt", token).send("ok")}
+        const {username, password} = userDataZodWithoutEmail.parse(req.body)
+        // if ({username, password} instanceof ZodError){
 
-        catch(e){
-            if (e instanceof Error)
-            res.status(400).json({"code" : e.message})
-        }    
+        //     res.status(400).json({ "code": ErrorCodes.VALIDATION_ERROR});
+        // }
+        const token = await userService.loginUser({username, password})
+        if (token instanceof Error){
+            res.status(400).json({"code" : token.message})
+        }
+        else res.cookie("jwt", token).send("ok")
+            
 
-    } catch (e) {
+    }catch(e) {
         res.status(400).json({ "code": "VALIDATION_ERROR"});
     }
 });
+
